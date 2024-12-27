@@ -52,7 +52,7 @@ if (isset($_SESSION['message'])) {
                         <input type="hidden" name="Confirm_Password" placeholder="Confirm Password">
                     </div>
                     <div class="formRow">
-                        <a href="#" class="forgetPass">Forget your password?</a>
+                        <a href="forgetpassword.php" class="forgetPass">Forget your password?</a>
                     </div>
                     <button type="submit" name="signin">SIGN IN</button>
                 </form>

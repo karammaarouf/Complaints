@@ -138,16 +138,16 @@ if (isset($_SESSION['user_id'])) {
     <div class="sidebar">
         <div class="user-info">
             <img src="../assets/user-avatar.png" alt="صورة المستخدم">
-            <h3>اسم المستخدم</h3>
-            <p>admin@example.com</p>
+            <h3><?= $_SESSION['user_name'] ?></h3>
+            <p><?= $_SESSION['user_email'] ?></p>
             <p>مسؤول الشوارع</p>
         </div>
 
         <div class="nav-links">
             <a href="dashboard.php"><i class="fas fa-home"></i> الرئيسية</a>
-            <a href="complaints.php"><i class="fas fa-clipboard-list"></i> إدارة الشكاوى</a>
-            <a href="reports.php"><i class="fas fa-chart-bar"></i> التقارير</a>
-            <a href="settings.php"><i class="fas fa-cog"></i> الإعدادات</a>
+            <a href=""><i class="fas fa-clipboard-list"></i> إدارة الشكاوى</a>
+            <a href=""><i class="fas fa-chart-bar"></i> التقارير</a>
+            <a href=""><i class="fas fa-cog"></i>الملف الشخصي</a>
             <a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
         </div>
     </div>
@@ -205,6 +205,7 @@ if (isset($_SESSION['user_id'])) {
 
         </table>
 
+</div>
 </body>
 
 </html>

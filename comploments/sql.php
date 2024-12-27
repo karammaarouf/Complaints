@@ -26,12 +26,19 @@ function getarea($id = 'all')
 }
 
 //بيانات المستخدم
-function getuser($id)
+function getuser($id='all',$email='all')
 {
     global $conn;
+    if ($id == 'all'&& $email == 'all') {
     $sql = $conn->prepare('select * from users where id = ?');
     $sql->execute([$id]);
     $result = $sql->fetch(PDO::FETCH_ASSOC);
+    }
+    if($email!='all') {
+        $sql = $conn->prepare('select * from users where email=?');
+        $sql->execute([$email]);
+        $result = $sql->fetch(PDO::FETCH_ASSOC);
+    }
     return $result;
 }
 

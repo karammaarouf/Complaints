@@ -25,7 +25,7 @@ if (isset($_POST['signin'])) { //التحقق من ان زر الفورم تم �
                 // تخزين بيانات المستخدم في الجلسة
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_email'] = $user['email'];
-                $_SESSION['user_name'] = $user['user_name'];
+                $_SESSION['user_name'] = $user['fullname'];
                 $_SESSION['type'] = $user['type'];
                 if ($user['type'] == 'admin') {// تحقق من نوع المستخدم
                 header('location:../admin/dashboard.php');
