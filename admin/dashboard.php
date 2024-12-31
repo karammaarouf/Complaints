@@ -31,181 +31,32 @@ if (isset($_SESSION['user_id'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<?php include('partials/head.php'); ?>
 
-<body>
-
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: right;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .view-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .status-pending {
-            color: #ff9800;
-        }
-
-        .status-closed {
-            color: #f44336;
-        }
-
-        .status-completed {
-            color: #4CAF50;
-        }
-    </style>
-    <style>
-        :root {
-            --mian_color: #257180;
-            --crame: #F2E5BF;
-            --orange: #FD8B51;
-            --brown: #CB6040;
-            --gray: #dadadae2;
-        }
-
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background-color: var(--mian_color);
-            position: fixed;
-            right: 0;
-            top: 0;
-            padding: 20px;
-            color: white;
-        }
-
-        .user-info {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #34495e;
-        }
-
-        .user-info img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
-
-        .nav-links {
-            margin-top: 20px;
-        }
-
-        .nav-links a {
-            display: block;
-            padding: 12px 15px;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .nav-links a:hover {
-            background-color: #34495e;
-        }
-
-        .main-content {
-            margin-right: 270px;
-            padding: 20px;
-        }
-    </style>
-
-    <div class="sidebar">
-        <div class="user-info">
-            <img src="../assets/user-avatar.png" alt="صورة المستخدم">
-            <h3><?= $_SESSION['user_name'] ?></h3>
-            <p><?= $_SESSION['user_email'] ?></p>
-            <p>مسؤول الشوارع</p>
-        </div>
-
-        <div class="nav-links">
-            <a href="dashboard.php"><i class="fas fa-home"></i> الرئيسية</a>
-            <a href=""><i class="fas fa-clipboard-list"></i> إدارة الشكاوى</a>
-            <a href=""><i class="fas fa-chart-bar"></i> التقارير</a>
-            <a href=""><i class="fas fa-cog"></i>الملف الشخصي</a>
-            <a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+<body class="fixed-navbar">
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        <?php include('partials/header.php');?>
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        <?php include('partials/sidebar.php');?>
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            
+            <!-- END PAGE CONTENT-->
+            <?php include('partials/footer.php');?>
         </div>
     </div>
-
-    <div class="main-content">
-        <form action="" method="post">
-            <select class="form-control" name="statu_value" id="district" required>
-                <option value="all" <?= $search_status=='all'?'selected':'' ?>>عرض الكل</option>
-                <option value="قيد الانتظار" <?= $search_status=='قيد الانتظار'?'selected':'' ?>>قيد الانتظار</option>
-                <option value="منتهية" <?= $search_status=='منتهية'?'selected':'' ?>>منتهية</option>
-                <option value="مرفوضة" <?= $search_status=='مرفوضة'?'selected':'' ?>>مرفوضة</option>
-                <input type="submit" name="search_status" value="فلترة">
-            </select>
-
-        </form>
-        <table>
-            <tr>
-                <th>الخصوصية</th>
-                <th>الوضع</th>
-                <th>تصنيف الشكوى</th>
-                <th>تاريخ التقديم</th>
-                <th>الحالة</th>
-                <th>الإجراءات</th>
-                <th>رقم الشكوى</th>
-            </tr>
-
-            <?php foreach ($complaints as $key => $complaint) { ?>
-
-                <tr>
-                    <td><?= $complaint['type'] ?></td>
-                    <td><?= $complaint['status'] ?></td>
-
-                    <td><?= getcategory($complaint['category_id'])['category_name'] ?></td>
-                    <td><?= $complaint['submission_date'] ?></td>
-                    <td>
-                        <form action="" method="post">
-                            <input type="hidden" name="complaint_id" value="<?= $complaint['complaint_id'] ?>">
-                            <input value="قيد الانتظار" type="submit" name="status" class="status-btn status-pending"
-                                <?= ($complaint['status'] == 'قيد الانتظار') ? 'hidden' : '' ?>>
-
-                            <input value="منتهية" type="submit" name="status" class="status-btn status-completed"
-                                <?= ($complaint['status'] == 'منتهية') ? 'hidden' : '' ?>>
-                            <input value="مرفوضة" type="submit" name="status" class="status-btn status-closed"
-                                <?= ($complaint['status'] == 'مرفوضة') ? 'hidden' : '' ?>>
-                        </form>
-                    </td>
-                    <td>
-                        <a href="view_complaint.php?id=1" class="view-btn">عرض</a>
-                    </td>
-                    <td><?= $key + 1 ?></td>
-                </tr>
-
-            <?php } ?>
-
-
-        </table>
-
-</div>
+    <!-- BEGIN THEME CONFIG PANEL-->
+    <?php include('partials/settings.php');?>
+    <!-- END THEME CONFIG PANEL-->
+    <!-- BEGIN PAGA BACKDROPS-->
+    <div class="sidenav-backdrop backdrop"></div>
+    <div class="preloader-backdrop">
+        <div class="page-preloader">Loading</div>
+    </div>
+    <!-- END PAGA BACKDROPS-->
+   <?php include('partials/scripts.php');?>
 </body>
-
 </html>
