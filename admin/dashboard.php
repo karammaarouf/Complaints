@@ -1,7 +1,8 @@
 صفحة الادمن
 <?php
 session_start();
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
+
     require_once('../comploments/connect.php');
     require_once('../comploments/sql.php');
     $_SESSION['sreach_status']='all';
@@ -24,7 +25,7 @@ if (isset($_SESSION['user_id'])) {
     $search_status=$_SESSION['sreach_status'];
     $complaints=$_SESSION['complaints'] ;
 
-} else {
+}else {
     header('location:../index.php');
 }
 ?>
@@ -43,7 +44,10 @@ if (isset($_SESSION['user_id'])) {
         <!-- END SIDEBAR-->
         <div class="content-wrapper">
             <!-- START PAGE CONTENT-->
-            
+            <div class="content">
+                <h1>هنا محتويات متغيرة حسب الضغط على الزر</h1>
+                <?php include('profile.php');?>
+            </div>
             <!-- END PAGE CONTENT-->
             <?php include('partials/footer.php');?>
         </div>
