@@ -23,26 +23,23 @@
                         <a href="javascript:;"><i class="fa fa-pinterest"></i></a>
                         <a href="javascript:;"><i class="fa fa-dribbble"></i></a>
                     </div>
-                    <div>
-                        <button class="btn btn-info btn-rounded m-b-5"><i class="fa fa-plus"></i> Follow</button>
-                        <button class="btn btn-default btn-rounded m-b-5">Message</button>
-                    </div>
+                   
                 </div>
             </div>
             <div class="ibox">
                 <div class="ibox-body">
                     <div class="row text-center m-b-20">
                         <div class="col-4">
-                            <div class="font-24 profile-stat-count">140</div>
-                            <div class="text-muted">Followers</div>
+                            <div class="font-24 profile-stat-count">15</div>
+                            <div class="text-muted">الشكاوي المنتظرة</div>
                         </div>
                         <div class="col-4">
-                            <div class="font-24 profile-stat-count">$780</div>
-                            <div class="text-muted">Sales</div>
+                            <div class="font-24 profile-stat-count">20</div>
+                            <div class="text-muted">الشكاوي المحلولة</div>
                         </div>
                         <div class="col-4">
                             <div class="font-24 profile-stat-count">15</div>
-                            <div class="text-muted">Projects</div>
+                            <div class="text-muted">الرسائل</div>
                         </div>
                     </div>
                     <p class="text-center">Lorem Ipsum is simply dummy text of the printing and industry. Lorem Ipsum
