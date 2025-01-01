@@ -87,6 +87,9 @@ if (isset($_SESSION['message'])) {
                     <div class="formRow">
                         <a href="#" class="forgetPass" hidden>Forget your password?</a>
                     </div>
+                    <div class="formRow">
+                        <input type="file" class="profile_image" name="profile_image" accept="image/*">
+                    </div>
                     <button type="submit" name="signup">SIGN UP</button>
                 </form>
             </div>

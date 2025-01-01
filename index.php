@@ -7,7 +7,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>خليه حسن يا بوت</title>
+    <title>نظام شكاوي البلدية</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
@@ -192,6 +192,13 @@ session_start();
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg w-100 ">
         <a class="navbar-brand navbar-logo" href="#">شكاوي بلدية</a>
+        <?php if(isset($_SESSION["user_id"])): ?>
+            <div class="user-circle" style="margin-right: 15px;">
+                <a href="<?php echo ($_SESSION["type"] == 'admin') ? 'admin/dashboard.php' : 'user/user.php'; ?>" style="text-decoration: none;">
+                    <i class="fas fa-user-circle fa-2x" style="color: #fff;"></i>
+                </a>
+            </div>
+        <?php endif; ?>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fas fa-bars text-white"></i>
         </button>
