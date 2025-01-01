@@ -1,5 +1,7 @@
 صفحة الادمن
 <?php
+include('../comploments/sql.php');
+
 session_start();
 if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
 
@@ -35,6 +37,30 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
 <?php include('partials/head.php'); ?>
 
 <body class="fixed-navbar">
+    <!-- رسالة اشعار اول التحميل بعد التعديلات -->
+    <?php if(isset($_SESSION['success_msg']) || isset($_SESSION['error_msg'])): ?>
+        <div class="alert-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+            <?php if(isset($_SESSION['success_msg'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>نجاح!</strong> <?php echo $_SESSION['success_msg']; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php unset($_SESSION['success_msg']); ?>
+            <?php endif; ?>
+
+            <?php if(isset($_SESSION['error_msg'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>خطأ!</strong> <?php echo $_SESSION['error_msg']; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php unset($_SESSION['error_msg']); ?>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
     <div class="page-wrapper">
         <!-- START HEADER-->
         <?php include('partials/header.php');?>
