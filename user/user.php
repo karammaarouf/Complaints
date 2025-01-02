@@ -1,9 +1,25 @@
 صفحة المستخدمين
 <?php
 session_start();
+require_once('../comploments/connect.php');
+require_once('../comploments/sql.php');
+
+$user = getuser($_SESSION['user_id']);
+$complaints = getcomplaint($user['id']); 
+$complaints_type = getcomplainttype($user['id'],$type='public');
+$messages = getmessage();
+
+if(isset($_POST['send_message'])){
+    $message_content= $_POST['message'];
+    $user_id = $_SESSION['user_id'];
+    $created_at = date('Y-m-d H:i:s');
+    
+    $id=unique_id();
+    sendmessage($user_id, $message_content,$created_at,$id);
+}
+
 if (isset($_SESSION['user_id']) && $_SESSION['type']=='user') {
-    require_once('../comploments/connect.php');
-    require_once('../comploments/sql.php');
+
     
 
 echo '<a href="../auth/logout.php">Logout</a>';
@@ -28,6 +44,7 @@ if (!headers_sent() && isset($_POST['update_profile'])) {
        
     }
 
+    
 }
 
 

@@ -2,7 +2,7 @@
 <header class="header">
             <div class="page-brand">
                 <a class="link" href="index.html">
-                    <span class="brand">Admin
+                    <span class="brand">User
                         <span class="brand-tip">CAST</span>
                     </span>
                     <span class="brand-mini">AC</span>

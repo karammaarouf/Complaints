@@ -1,18 +1,5 @@
 <?php
 
-$user = getuser($_SESSION['user_id']);
-$complaints = getcomplaint($user['id']); 
-$complaints_type = getcomplainttype($user['id'],$type='public');
-$messages = getmessage();
-
-if(isset($_POST['send_message'])){
-    $message_content= $_POST['message'];
-    $user_id = $_SESSION['user_id'];
-    $created_at = date('Y-m-d H:i:s');
-    
-    $id=unique_id();
-    sendmessage($user_id, $message_content,$created_at,$id);
-}
 
 
 
