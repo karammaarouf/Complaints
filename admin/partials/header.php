@@ -1,3 +1,4 @@
+
 <header class="header">
             <div class="page-brand">
                 <a class="link" href="index.html">
@@ -142,7 +143,7 @@
                             <img src="../css/assets/img/admin-avatar.png" />
                             <span><?php echo ($_SESSION["type"] == 'admin') ? 'Admin' : 'User'; ?></span><i class="fa fa-angle-down m-l-5"></i></a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="profile.html"><i class="fa fa-user"></i>Profile</a>
+                            <a class="dropdown-item" href="dashboard.php"><i class="fa fa-user"></i>Profile</a>
                             <li class="dropdown-divider"></li>
                             <a class="dropdown-item" href="../auth/logout.php"><i class="fa fa-power-off"></i>Logout</a>
                         </ul>
