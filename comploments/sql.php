@@ -146,5 +146,19 @@ function updateuser($id, $fullname, $email, $password_update) {
         return false;
     }
 }
+//لتحديث حالة الشكوى رفض او قبول
+function actioncomplaint($action, $complaint_id){
+    global $conn;
+    $today = date('Y/m/d');
+    if($action == 'Accept') {
+        $sql = $conn->prepare('UPDATE complaints SET status="Done", resolution_date=? WHERE complaint_id=?');
+    } elseif($action == 'Deny') {
+        $sql = $conn->prepare('UPDATE complaints SET status="Closed", resolution_date=? WHERE complaint_id=?');
+    }
+
+    $sql->execute([$today, $complaint_id]);
+    return $sql->rowCount() > 0;
+}
+
 
 ?>

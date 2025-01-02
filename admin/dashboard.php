@@ -1,12 +1,11 @@
 صفحة الادمن
 <?php
 include('../comploments/sql.php');
-
+require_once('../comploments/connect.php');
 session_start();
-if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
 
-    require_once('../comploments/connect.php');
-    require_once('../comploments/sql.php');
+if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
+    $user = getuser($_SESSION['user_id']);
     $_SESSION['sreach_status']='all';
     $_SESSION['complaints'] = getcomplaint();
 
@@ -21,6 +20,21 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
         $_SESSION['sreach_status'] = $_POST['statu_value'];
         $_SESSION['complaints'] = getcomplaint(status: $_SESSION['sreach_status']);
 
+
+    }
+    if (!headers_sent() && isset($_POST['update_profile'])) {
+        $id = $_POST['id'];
+        $fullname = $_POST['fullname'];
+        $email = $_POST['email']; 
+        $password = $_POST['password'];
+    
+        if (updateuser($id, $fullname, $email, $password)) {
+            $_SESSION['success_msg'] = 'تم تحديث البيانات بنجاح';
+            
+        } else {
+            $_SESSION['error_msg'] = 'حدث خطأ في تحديث البيانات';
+           
+        }
 
     }
 

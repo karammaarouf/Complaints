@@ -1,28 +1,4 @@
-<?php
 
-
-$user = getuser($_SESSION['user_id']);
-
-
-$complaints = getcomplaint(); 
-if (!headers_sent() && isset($_POST['update_profile'])) {
-    $id = $_POST['id'];
-    $fullname = $_POST['fullname'];
-    $email = $_POST['email']; 
-    $password = $_POST['password'];
-
-    if (updateuser($id, $fullname, $email, $password)) {
-        $_SESSION['success_msg'] = 'تم تحديث البيانات بنجاح';
-        
-    } else {
-        $_SESSION['error_msg'] = 'حدث خطأ في تحديث البيانات';
-       
-    }
-header('location: dashboard.php');
-
-}
-
-?>
 <div class="page-heading">
     <h1 class="page-title">Profile</h1>
     <ol class="breadcrumb">
@@ -38,7 +14,7 @@ header('location: dashboard.php');
             <div class="ibox">
                 <div class="ibox-body text-center">
                     <div class="m-t-20">
-                        <img class="img-circle" src="./assets/img/users/u3.jpg" />
+                        <img class="img-circle" src="http://localhost/Complaints/css/assets/img/admin-avatar.png" />
                     </div>
                     <h5 class="font-strong m-b-10 m-t-10"><?= $_SESSION['user_name'] ?></h5>
                     <div class="m-b-20 text-muted">Web Developer</div>
@@ -88,7 +64,7 @@ header('location: dashboard.php');
                     <div class="tab-content">
                         
                         <div class="tab-pane fade" id="tab-2">
-                            <form action="" method="post">
+                            <form action="dashboard.php" method="post">
                             <input type="hidden" name="id" value="<?= $user['id'] ?>" >
                                 <div class="row">
                                     <div class="col-sm-6 form-group">

@@ -23,6 +23,16 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
 
 
     }
+    if (isset($_POST['action'])) {
+        $action = $_POST['action'];
+        $complaint_id=$_POST['complaint_id'];
+        
+        if (actioncomplaint($action, $complaint_id)) {
+            $_SESSION['success_msg']="تم معالجة الشكوى بنجاح";
+            header('location:complaints.php');
+            exit();
+        }
+    }
 
     $search_status=$_SESSION['sreach_status'];
     $complaints=$_SESSION['complaints'] ;
@@ -37,6 +47,30 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
 <?php include('partials/head.php'); ?>
 
 <body class="fixed-navbar">
+        <!-- رسالة اشعار اول التحميل بعد التعديلات -->
+        <?php if(isset($_SESSION['success_msg']) || isset($_SESSION['error_msg'])): ?>
+        <div class="alert-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+            <?php if(isset($_SESSION['success_msg'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>نجاح!</strong> <?php echo $_SESSION['success_msg']; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php unset($_SESSION['success_msg']); ?>
+            <?php endif; ?>
+
+            <?php if(isset($_SESSION['error_msg'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>خطأ!</strong> <?php echo $_SESSION['error_msg']; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php unset($_SESSION['error_msg']); ?>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
     <div class="page-wrapper">
         <!-- START HEADER-->
         <?php include('partials/header.php');?>
@@ -69,6 +103,7 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
                                     <th>التصنيف</th>
                                     <th>المحتوى</th>
                                     <th>تاريخ التقديم</th>
+                                    <th>تاريخ الحل</th>
                                     <th>الاجراءات</th>
                                 </tr>
                             </thead>
@@ -79,6 +114,7 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
                                     <th>التصنيف</th>
                                     <th>المحتوى</th>
                                     <th>تاريخ التقديم</th>
+                                    <th>تاريخ الحل</th>
                                     <th>الاجراءات</th>
                                 </tr>
                             </tfoot>
@@ -91,7 +127,24 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
                                     <td><?= getcategory($complaint['category_id'])['category_name'] ?></td>
                                     <td><?= $complaint['description'] ?></td>
                                     <td><?= $complaint['submission_date'] ?></td>
-                                    <td>زر</td>
+                                    <td><?= $complaint['resolution_date'] ?></td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <form action="complaints.php" method="post">
+                                                    <input type="hidden" name="complaint_id" value="<?= $complaint['complaint_id'] ?>">
+                                                    <button type="submit" name="action" class="dropdown-item" value="Accept">Accept</button>
+                                                    <button type="submit" name="action" class="dropdown-item" value="Deny">Deny</button>
+                                                </form>
+                                                </form>
+   
+                                            </div>
+                                        </div>
+                                    </td>
+                                    </td>
                                 </tr>
                                 <?php endforeach; ?>                               
                             </tbody>
@@ -118,17 +171,11 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
     <!-- PAGE LEVEL SCRIPTS-->
     <script type="text/javascript">
         $(function() {
-            $('#example-table').DataTable({
-                pageLength: 10,
-                //"ajax": './assets/demo/data/table_data.json',
-                /*"columns": [
-                    { "data": "name" },
-                    { "data": "office" },
-                    { "data": "extn" },
-                    { "data": "start_date" },
-                    { "data": "salary" }
-                ]*/
-            });
+            if (!$.fn.DataTable.isDataTable('#example-table')) {
+                $('#example-table').DataTable({
+                    pageLength: 10
+                });
+            }
         })
     </script>
 </body>
