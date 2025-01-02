@@ -224,7 +224,7 @@ else {
                 <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
                 
                 <li class="nav-item active">
-                    <a class="nav-link" href="../index.php"><i class="far fa-address-book"></i>الصفحة الرئيسية </a>
+                    <a class="nav-link" href="user.php"><i class="far fa-address-book"></i>الصفحة الرئيسية </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php
@@ -248,6 +248,7 @@ else {
             </ul>
         </div>
     </nav>
+
 
   <section class="complaint-section" style="background: #f8f9fa; padding: 100px 0; " >
     <div class="container">

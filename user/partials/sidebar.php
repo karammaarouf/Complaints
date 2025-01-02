@@ -8,13 +8,13 @@
                     </div>
                     <div class="admin-info">
 
-                        <div class="font-strong"><?= $_SESSION['user_name'] ?></div><small>Administrator</small></div>
+                        <div class="font-strong"><?= $_SESSION['user_name'] ?></div><small><?= $_SESSION['type'] ?></small></div>
 
                 </div>
                 <ul class="side-menu metismenu">
                     <li>
-                        <a class="active" href="./dashboard.php"><i class="sidebar-item-icon fa fa-th-large"></i>
-                            <span class="nav-label">Dashboard</span>
+                        <a class="active" href="../index.php"><i class="sidebar-item-icon fa fa-home"></i>
+                            <span class="nav-label">Home</span>
                         </a>
                         
                     </li>
