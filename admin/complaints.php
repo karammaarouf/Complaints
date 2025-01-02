@@ -168,6 +168,10 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
     <!-- END PAGA BACKDROPS-->
     <!-- CORE PLUGINS-->
     <?php include('partials/scripts.php');?>
+        <!-- PAGE LEVEL PLUGINS-->
+    <script src="../css/assets/vendors/DataTables/datatables.min.js" type="text/javascript"></script>
+    <!-- CORE SCRIPTS-->
+    <script src="../css/assets/js/app.min.js" type="text/javascript"></script>
     <!-- PAGE LEVEL SCRIPTS-->
     <script type="text/javascript">
         $(function() {

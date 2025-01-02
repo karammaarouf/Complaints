@@ -1,4 +1,3 @@
-صفحة المستخدمين
 <?php
 session_start();
 if (isset($_SESSION['user_id']) && $_SESSION['type']=='user') {
@@ -72,7 +71,6 @@ if (!headers_sent() && isset($_POST['update_profile'])) {
         <div class="content-wrapper">
             <!-- START PAGE CONTENT-->
             <div class="content">
-                <h1>هنا محتويات متغيرة حسب الضغط على الزر</h1>
                 <?php include('profile.php');?>
             </div>
             <!-- END PAGE CONTENT-->
