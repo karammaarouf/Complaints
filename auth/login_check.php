@@ -31,7 +31,7 @@ if (isset($_POST['signin'])) { //التحقق من ان زر الفورم تم �
                 header('location:../admin/dashboard.php');
                 }
                 elseif ($user['type'] == 'user') {
-                    header('location:../index.php');
+                    header('location:../user/user.php');
                 }
             } else {
                 $_SESSION['message'] = 'كلمة المرور غير صحيحة';

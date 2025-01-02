@@ -17,23 +17,6 @@ if(isset($_POST['send_message'])){
 
 
 
-if (!headers_sent() && isset($_POST['update_profile'])) {
-    $id = $_POST['id'];
-    $fullname = $_POST['fullname'];
-    $email = $_POST['email']; 
-    $password = $_POST['password'];
-
-    if (updateuser($id, $fullname, $email, $password)) {
-        $_SESSION['success_msg'] = 'تم تحديث البيانات بنجاح';
-        
-    } else {
-        $_SESSION['error_msg'] = 'حدث خطأ في تحديث البيانات';
-       
-    }
-header('location: dashboard.php');
-exit;
-}
-
 
 ?>
 <div class="page-heading">
