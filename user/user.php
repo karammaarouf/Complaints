@@ -1,4 +1,3 @@
-صفحة المستخدمين
 <?php
 session_start();
 require_once('../comploments/connect.php');
@@ -89,7 +88,6 @@ if (!headers_sent() && isset($_POST['update_profile'])) {
         <div class="content-wrapper">
             <!-- START PAGE CONTENT-->
             <div class="content">
-                <h1>هنا محتويات متغيرة حسب الضغط على الزر</h1>
                 <?php include('profile.php');?>
             </div>
             <!-- END PAGE CONTENT-->

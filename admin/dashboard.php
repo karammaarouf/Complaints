@@ -1,4 +1,4 @@
-صفحة الادمن
+
 <?php
 include('../comploments/sql.php');
 require_once('../comploments/connect.php');
@@ -85,7 +85,6 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
         <div class="content-wrapper">
             <!-- START PAGE CONTENT-->
             <div class="content">
-                <h1>هنا محتويات متغيرة حسب الضغط على الزر</h1>
                 <?php include('profile.php');?>
             </div>
             <!-- END PAGE CONTENT-->
