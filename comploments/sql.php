@@ -128,23 +128,24 @@ function getcomplainttype($id = 'all',$status='all')
 
 
 //تحديث بيانات المستخدم
-function updateuser($id, $fullname, $email, $password_update) {
+function updateuser($id, $fullname, $email, $password)
+{
     global $conn;
-    
-    $sql = "UPDATE users SET 
-            fullname = ?, 
-            email = ? 
-            $password_update 
-            WHERE id = ?";
-            
-    try {
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam("ssi", $fullname, $email, $id);
-        return $stmt->execute();
-    } catch (Exception $e) {
-        error_log($e->getMessage());
-        return false;
+    if (!empty($password)) {
+        $sql = $conn->prepare('UPDATE users SET fullname=?, email=?, password=? WHERE id=?');
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $sql->execute([$fullname, $email, $hashed_password, $id]);
+    } else {
+        $sql = $conn->prepare('UPDATE users SET fullname=?, email=? WHERE id=?');
+        $sql->execute([$fullname, $email, $id]);
     }
+    
+    if($sql->rowCount() > 0) {
+        $_SESSION['user_name'] = $fullname;
+        $_SESSION['email'] = $email;
+        return true;
+    }
+    return false;
 }
 //لتحديث حالة الشكوى رفض او قبول
 function actioncomplaint($action, $complaint_id){
