@@ -1,8 +1,3 @@
-<?php
-
-
-
-?>
 <div class="page-heading">
     <h1 class="page-title">Profile</h1>
     <ol class="breadcrumb">
@@ -28,7 +23,7 @@
                         <a href="javascript:;"><i class="fa fa-pinterest"></i></a>
                         <a href="javascript:;"><i class="fa fa-dribbble"></i></a>
                     </div>
-                   
+
                 </div>
             </div>
             <div class="ibox">
@@ -66,19 +61,21 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                        
+
                         <div class="tab-pane fade" id="tab-2">
                             <form action="" method="post">
-                            <input type="hidden" name="id" value="<?= $user['id'] ?>" >
+                                <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                 <div class="row">
                                     <div class="col-sm-6 form-group">
                                         <label>Full Name</label>
-                                        <input name="fullname" class="form-control" type="text" placeholder="First Name" value="<?= $user['fullname'] ?>" >
+                                        <input name="fullname" class="form-control" type="text" placeholder="First Name"
+                                            value="<?= $user['fullname'] ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Email</label>
-                                    <input name="email" class="form-control" type="text" placeholder="Email address" value="<?= $user['email'] ?>">
+                                    <input name="email" class="form-control" type="text" placeholder="Email address"
+                                        value="<?= $user['email'] ?>">
                                 </div>
                                 <div class="form-group">
                                     <label>Password</label>
@@ -90,7 +87,7 @@
                                         <span class="input-span"></span>Remamber me</label>
                                 </div>
                                 <div class="form-group">
-                                    <input name="update_profile" class="btn btn-default" type="submit" value="Update" >
+                                    <input name="update_profile" class="btn btn-default" type="submit" value="Update">
                                 </div>
                             </form>
                         </div>
@@ -98,17 +95,18 @@
                             <h5 class="text-info m-b-20 m-t-20"><i class="fa fa-bullhorn"></i> Latest Complaints</h5>
                             <ul class="media-list media-list-divider m-0">
                                 <!-- عرض الشكاوي -->
-                                <?php foreach($complaints_type as $complaint): ?>
-                                <li class="media">
-                                    <div class="media-img"><i class="ti-user font-18 text-muted"></i></div>
-                                    <div class="media-body">
-                                        <div class="media-heading"><?= $complaint['type'] ?><small
-                                                class="float-right text-muted"><?= $complaint['submission_date'] ?></small></div>
-                                        <div class="font-13"><?= $complaint['description'] ?></div>
-                                    </div>
-                                </li>
+                                <?php foreach ($complaints_type as $complaint): ?>
+                                    <li class="media">
+                                        <div class="media-img"><i class="ti-user font-18 text-muted"></i></div>
+                                        <div class="media-body">
+                                            <div class="media-heading"><?= $complaint['type'] ?><small
+                                                    class="float-right text-muted"><?= $complaint['submission_date'] ?></small>
+                                            </div>
+                                            <div class="font-13"><?= $complaint['description'] ?></div>
+                                        </div>
+                                    </li>
                                 <?php endforeach ?>
-                                
+
                             </ul>
                         </div>
                     </div>
@@ -117,40 +115,40 @@
         </div>
     </div>
     <style>
-    .profile-social a {
-        font-size: 16px;
-        margin: 0 10px;
-        color: #999;
-    }
+        .profile-social a {
+            font-size: 16px;
+            margin: 0 10px;
+            color: #999;
+        }
 
-    .profile-social a:hover {
-        color: #485b6f;
-    }
+        .profile-social a:hover {
+            color: #485b6f;
+        }
 
-    .profile-stat-count {
-        font-size: 22px
-    }
+        .profile-stat-count {
+            font-size: 22px
+        }
 
-    .admin-select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        margin-bottom: 10px;
-        direction: rtl;
-    }
+        .admin-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            direction: rtl;
+        }
 
-    .chat-footer {
-        padding: 15px;
-        border-top: 1px solid #eee;
-        display: flex;
-        flex-direction: column;
-    }
+        .chat-footer {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </div>
 
 <!-- إضافة زر الدردشة العائم ونافذة المحادثة -->
-<div class="chat-button" onclick="toggleChat()" style="background: var(--mian_color); color: white;" >
+<div class="chat-button" onclick="toggleChat()" style="background: var(--mian_color); color: white;">
     <i class="fa fa-comments" style="color: var(--crame);"></i>
 </div>
 
@@ -166,12 +164,13 @@
         <div class="chat-footer">
             <select name="admin_id" id="adminSelect" class="admin-select" required>
                 <option value="">اختر المسؤول</option>
-                <?php foreach($admins as $admin): ?>
+                <?php foreach ($admins as $admin): ?>
                     <option value="<?= $admin['id'] ?>"><?= $admin['fullname'] ?></option>
                 <?php endforeach; ?>
             </select>
             <input type="text" name="message" id="messageInput" placeholder="اكتب رسالتك هنا..." required>
-            <button type="submit" name="send_message" style="background: var(--mian_color); color: white;" ><i class="fa fa-paper-plane" ></i></button>
+            <button type="submit" name="send_message" style="background: var(--mian_color); color: white;"><i
+                    class="fa fa-paper-plane"></i></button>
         </div>
     </form>
 </div>
@@ -180,13 +179,14 @@
 
 <style>
     /* Existing styles ... */
-:root{
-    --mian_color: #257180;
-    --crame: #F2E5BF;
-    --orange: #FD8B51;
-    --brown: #CB6040;
-    --gray: #dadadae2;
-}
+    :root {
+        --mian_color: #257180;
+        --crame: #F2E5BF;
+        --orange: #FD8B51;
+        --brown: #CB6040;
+        --gray: #dadadae2;
+    }
+
     .chat-button {
         position: fixed;
         bottom: 30px;
@@ -199,7 +199,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         z-index: 1000;
     }
 
@@ -216,7 +216,7 @@
         height: 400px;
         background: white;
         border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         display: none;
         z-index: 1000;
         flex-direction: column;
@@ -269,47 +269,47 @@
     }
 </style>
 <script>
-function toggleChat() {
-    const chatWindow = document.getElementById('chatWindow');
-    if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
-        chatWindow.style.display = 'flex';
-    } else {
-        chatWindow.style.display = 'none';
+    function toggleChat() {
+        const chatWindow = document.getElementById('chatWindow');
+        if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
+            chatWindow.style.display = 'flex';
+        } else {
+            chatWindow.style.display = 'none';
+        }
     }
-}
 
-function sendMessage(e) {
-    if(e) {
-        e.preventDefault();
-    }
-    
-    const messageInput = document.getElementById('messageInput');
-    const adminSelect = document.getElementById('adminSelect');
-    const message = messageInput.value.trim();
-    const adminId = adminSelect.value;
-    
-    if (!adminId) {
-        alert('الرجاء اختيار المسؤول أولاً');
-        return;
-    }
-    
-    if (message) {
-        fetch('', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `message=${encodeURIComponent(message)}&admin_id=${adminId}&send_message=1`
-        })
-        .then(response => {
-            if(response.ok) {
-                messageInput.value = '';
-                // Add message to chat window
-                const chatBody = document.getElementById('chatBody');
-                const messageElement = document.createElement('div');
-                messageElement.style.marginBottom = '10px';
-                messageElement.style.textAlign = 'right';
-                messageElement.innerHTML = `
+    function sendMessage(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        const messageInput = document.getElementById('messageInput');
+        const adminSelect = document.getElementById('adminSelect');
+        const message = messageInput.value.trim();
+        const adminId = adminSelect.value;
+
+        if (!adminId) {
+            alert('الرجاء اختيار المسؤول أولاً');
+            return;
+        }
+
+        if (message) {
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `message=${encodeURIComponent(message)}&admin_id=${adminId}&send_message=1`
+            })
+                .then(response => {
+                    if (response.ok) {
+                        messageInput.value = '';
+                        // Add message to chat window
+                        const chatBody = document.getElementById('chatBody');
+                        const messageElement = document.createElement('div');
+                        messageElement.style.marginBottom = '10px';
+                        messageElement.style.textAlign = 'right';
+                        messageElement.innerHTML = `
                     <div style="background: var(--mian_color); color: white; padding: 8px 15px; border-radius: 20px; display: inline-block;">
                         ${message}
                         <small style="display: block; font-size: 0.8em; opacity: 0.8;">
@@ -317,13 +317,13 @@ function sendMessage(e) {
                         </small>
                     </div>
                 `;
-                chatBody.appendChild(messageElement);
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }
-        })
-        .catch(error => console.error('Error:', error));
+                        chatBody.appendChild(messageElement);
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
     }
-}
 
 
 </script>

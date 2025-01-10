@@ -24,11 +24,18 @@ if (isset($_POST['signin'])) { //التحقق من ان زر الفورم تم �
             if (password_verify($pass, $user['password'])) {
                 // تخزين بيانات المستخدم في الجلسة
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_email'] = $user['email']; 
                 $_SESSION['user_name'] = $user['fullname'];
                 $_SESSION['type'] = $user['type'];
+
+                // حفظ البيانات في الكوكيز لمدة 30 يوم
+                setcookie('user_id', $user['id'], time() + (86400 * 30), '/');
+                setcookie('user_email', $user['email'], time() + (86400 * 30), '/');
+                setcookie('user_name', $user['fullname'], time() + (86400 * 30), '/');
+                setcookie('user_type', $user['type'], time() + (86400 * 30), '/');
+
                 if ($user['type'] == 'admin') {// تحقق من نوع المستخدم
-                header('location:../admin/dashboard.php');
+                    header('location:../admin/dashboard.php');
                 }
                 elseif ($user['type'] == 'user') {
                     header('location:../user/user.php');

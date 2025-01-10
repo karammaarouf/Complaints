@@ -1,12 +1,24 @@
-
 <?php
 include('../comploments/sql.php');
 require_once('../comploments/connect.php');
 session_start();
 
-if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
+// Check for cookie and restore session if needed
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['user_id'])) {
+    // Restore all session data from cookies
+    $_SESSION['user_id'] = $_COOKIE['user_id'];
+    $_SESSION['user_email'] = $_COOKIE['user_email'];
+    $_SESSION['user_name'] = $_COOKIE['user_name'];
+    $_SESSION['type'] = $_COOKIE['user_type'];
+
     $user = getuser($_SESSION['user_id']);
-    $_SESSION['sreach_status']='all';
+    $_SESSION['sreach_status'] = 'all';
+    $_SESSION['complaints'] = getcomplaint();
+}
+
+if (isset($_SESSION["user_id"]) && $_SESSION["type"] == 'admin') {
+    $user = getuser($_SESSION['user_id']);
+    $_SESSION['sreach_status'] = 'all';
     $_SESSION['complaints'] = getcomplaint();
 
     if (isset($_POST['status'])) {
@@ -25,36 +37,36 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"]=='admin') {
     if (!headers_sent() && isset($_POST['update_profile'])) {
         $id = $_POST['id'];
         $fullname = $_POST['fullname'];
-        $email = $_POST['email']; 
+        $email = $_POST['email'];
         $password = $_POST['password'];
-    
+
         if (updateuser($id, $fullname, $email, $password)) {
             $_SESSION['success_msg'] = 'تم تحديث البيانات بنجاح';
-            
+
         } else {
             $_SESSION['error_msg'] = 'حدث خطأ في تحديث البيانات';
-           
+
         }
 
     }
 
-    $search_status=$_SESSION['sreach_status'];
-    $complaints=$_SESSION['complaints'] ;
+    $search_status = $_SESSION['sreach_status'];
+    $complaints = $_SESSION['complaints'];
 
-}else {
+} else {
     header('location:../index.php');
 }
 
 $messages = getmessage();
 
-if(isset($_POST['send_message'])){
-    $message_content= $_POST['message'];
+if (isset($_POST['send_message'])) {
+    $message_content = $_POST['message'];
     $user_id = $_SESSION['user_id'];
     $receiver_id = $_POST['admin_id'];
     $created_at = date('Y-m-d H:i:s');
-    
-    $id=unique_id();
-    sendmessage($user_id, $message_content,$created_at,$id,$receiver_id);
+
+    $id = unique_id();
+    sendmessage($user_id, $message_content, $created_at, $id, $receiver_id);
 }
 $messages = getmessagebyid($_SESSION['user_id']);
 ?>
@@ -65,9 +77,9 @@ $messages = getmessagebyid($_SESSION['user_id']);
 
 <body class="fixed-navbar">
     <!-- رسالة اشعار اول التحميل بعد التعديلات -->
-    <?php if(isset($_SESSION['success_msg']) || isset($_SESSION['error_msg'])): ?>
+    <?php if (isset($_SESSION['success_msg']) || isset($_SESSION['error_msg'])): ?>
         <div class="alert-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
-            <?php if(isset($_SESSION['success_msg'])): ?>
+            <?php if (isset($_SESSION['success_msg'])): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong>نجاح!</strong> <?php echo $_SESSION['success_msg']; ?>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -77,7 +89,7 @@ $messages = getmessagebyid($_SESSION['user_id']);
                 <?php unset($_SESSION['success_msg']); ?>
             <?php endif; ?>
 
-            <?php if(isset($_SESSION['error_msg'])): ?>
+            <?php if (isset($_SESSION['error_msg'])): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>خطأ!</strong> <?php echo $_SESSION['error_msg']; ?>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -90,22 +102,22 @@ $messages = getmessagebyid($_SESSION['user_id']);
     <?php endif; ?>
     <div class="page-wrapper">
         <!-- START HEADER-->
-        <?php include('partials/header.php');?>
+        <?php include('partials/header.php'); ?>
         <!-- END HEADER-->
         <!-- START SIDEBAR-->
-        <?php include('partials/sidebar.php');?>
+        <?php include('partials/sidebar.php'); ?>
         <!-- END SIDEBAR-->
         <div class="content-wrapper">
             <!-- START PAGE CONTENT-->
             <div class="content">
-                <?php include('profile.php');?>
+                <?php include('profile.php'); ?>
             </div>
             <!-- END PAGE CONTENT-->
-            <?php include('partials/footer.php');?>
+            <?php include('partials/footer.php'); ?>
         </div>
     </div>
     <!-- BEGIN THEME CONFIG PANEL-->
-    <?php include('partials/settings.php');?>
+    <?php include('partials/settings.php'); ?>
     <!-- END THEME CONFIG PANEL-->
     <!-- BEGIN PAGA BACKDROPS-->
     <div class="sidenav-backdrop backdrop"></div>
@@ -113,6 +125,7 @@ $messages = getmessagebyid($_SESSION['user_id']);
         <div class="page-preloader">Loading</div>
     </div>
     <!-- END PAGA BACKDROPS-->
-   <?php include('partials/scripts.php');?>
+    <?php include('partials/scripts.php'); ?>
 </body>
+
 </html>
