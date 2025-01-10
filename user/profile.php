@@ -150,8 +150,8 @@
 </div>
 
 <!-- إضافة زر الدردشة العائم ونافذة المحادثة -->
-<div class="chat-button" onclick="toggleChat()">
-    <i class="fa fa-comments"></i>
+<div class="chat-button" onclick="toggleChat()" style="background: var(--mian_color); color: white;" >
+    <i class="fa fa-comments" style="color: var(--crame);"></i>
 </div>
 
 <div class="chat-window" id="chatWindow">
@@ -171,7 +171,7 @@
                 <?php endforeach; ?>
             </select>
             <input type="text" name="message" id="messageInput" placeholder="اكتب رسالتك هنا..." required>
-            <button type="submit" name="send_message"><i class="fa fa-paper-plane"></i></button>
+            <button type="submit" name="send_message" style="background: var(--mian_color); color: white;" ><i class="fa fa-paper-plane" ></i></button>
         </div>
     </form>
 </div>
@@ -180,7 +180,13 @@
 
 <style>
     /* Existing styles ... */
-
+:root{
+    --mian_color: #257180;
+    --crame: #F2E5BF;
+    --orange: #FD8B51;
+    --brown: #CB6040;
+    --gray: #dadadae2;
+}
     .chat-button {
         position: fixed;
         bottom: 30px;
@@ -218,7 +224,7 @@
 
     .chat-header {
         padding: 15px;
-        background: #007bff;
+        background: var(--mian_color);
         color: white;
         border-radius: 10px 10px 0 0;
         display: flex;
@@ -304,7 +310,7 @@ function sendMessage(e) {
                 messageElement.style.marginBottom = '10px';
                 messageElement.style.textAlign = 'right';
                 messageElement.innerHTML = `
-                    <div style="background: #007bff; color: white; padding: 8px 15px; border-radius: 20px; display: inline-block;">
+                    <div style="background: var(--mian_color); color: white; padding: 8px 15px; border-radius: 20px; display: inline-block;">
                         ${message}
                         <small style="display: block; font-size: 0.8em; opacity: 0.8;">
                             إلى: ${adminSelect.options[adminSelect.selectedIndex].text}
