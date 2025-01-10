@@ -101,9 +101,12 @@
                                         <div class="media-body">
                                             <div class="media-heading"><?= $complaint['type'] ?><small
                                                     class="float-right text-muted"><?= $complaint['submission_date'] ?></small>
+                                                    <p style="color:<?= ($complaint['status']=='Done'?'green':($complaint['status']=='Closed'?'red':'orange')) ?>;"><?=$complaint['status'] ?></p>
                                             </div>
                                             <div class="font-13"><?= $complaint['description'] ?></div>
                                         </div>
+                                        
+                                        
                                     </li>
                                 <?php endforeach ?>
 

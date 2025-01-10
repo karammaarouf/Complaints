@@ -462,7 +462,7 @@ if (isset($_SESSION['user_id'])) {
                                                 <tbody>
                                                     <!-- عرض الشكاوي -->
                                                     <?php foreach ($complaints as $complaint): ?>
-                                                        <?php if ($complaint['type'] != 'private' || $complaint['user_id'] == $_SESSION['user_id']): ?>
+                                                        <?php if ($complaint['type'] != 'خاصة' || $complaint['user_id'] == $_SESSION['user_id']): ?>
                                                             <tr>
                                                                 <td><?= $complaint['status'] ?></td>
                                                                 <td><?= getarea($complaint['area_id'])['area_name'] ?></td>
@@ -473,6 +473,7 @@ if (isset($_SESSION['user_id'])) {
                                                                 <td><?= $complaint['resolution_date'] ?></td>
                                                                 <td>
                                                                     <?php if ($complaint['user_id'] == $_SESSION['user_id']): ?>
+                                                                        <?php if ($complaint['status'] != 'Done'): ?>
                                                                         <form action="complaints.php" method="post">
                                                                             <input type="hidden" name="complaint_id"
                                                                                 value="<?= $complaint['complaint_id'] ?>">
@@ -481,6 +482,9 @@ if (isset($_SESSION['user_id'])) {
                                                                             <input type="hidden" name="active_tab"
                                                                                 value="complaintsList">
                                                                         </form>
+                                                                    <?php else : ?>
+                                                                        <p>تم الحل</p>
+                                                                    <?php endif; ?>
                                                                     <?php endif; ?>
                                                                 </td>
                                                             </tr>

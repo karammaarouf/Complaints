@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 26, 2024 at 05:53 PM
+-- Generation Time: Jan 10, 2025 at 08:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -92,7 +92,7 @@ CREATE TABLE `complaints` (
   `user_id` varchar(20) NOT NULL,
   `description` text NOT NULL,
   `category_id` varchar(20) NOT NULL,
-  `status` varchar(50) NOT NULL DEFAULT 'قيد الانتظار' COMMENT 'حالة الشكوى ',
+  `status` varchar(50) NOT NULL DEFAULT 'Pending' COMMENT 'حالة الشكوى ',
   `submission_date` date NOT NULL DEFAULT current_timestamp() COMMENT 'تاريخ تقديم الشكوى',
   `resolution_date` date NOT NULL COMMENT 'تاريخ حل الشكوى بحالة حلها',
   `type` varchar(10) NOT NULL COMMENT 'عامة أو خاصة',
@@ -104,13 +104,34 @@ CREATE TABLE `complaints` (
 --
 
 INSERT INTO `complaints` (`complaint_id`, `user_id`, `description`, `category_id`, `status`, `submission_date`, `resolution_date`, `type`, `area_id`) VALUES
-('dFD7UngyoSeut52XjNBw', 'UXhj6wehBI0oHDmRtmN5', 'Velit consectetur o', '4', 'قيد الانتظار', '2024-12-23', '0000-00-00', 'public', '4'),
-('Dx3rPC6fnPhbmJamltCA', 'UXhj6wehBI0oHDmRtmN5', 'Aliquam molestiae mo', '5', 'مرفوضة', '2024-12-23', '0000-00-00', 'public', '2'),
-('fcCWWgElptW15EPLFrfq', 'UXhj6wehBI0oHDmRtmN5', 'hgokdmfvponeiuojbpawnpfmnpeaojrbp[n[sinb', '7', 'قيد الانتظار', '2024-12-23', '0000-00-00', 'public', '2'),
-('GZYuadgGdgU2tzxWmzgG', 'UXhj6wehBI0oHDmRtmN5', 'Porro ratione vel qu', '1', 'مرفوضة', '2024-12-23', '0000-00-00', 'private', '3'),
-('jbRhQNVBdT5iLKlIrTO8', 'UXhj6wehBI0oHDmRtmN5', 'Sit consequatur ad n', '5', 'قيد الانتظار', '2024-12-23', '0000-00-00', 'private', '3'),
-('PXefV2bhgUoWPSTjEB2G', 'UXhj6wehBI0oHDmRtmN5', 'Ut quasi quo quia si', '5', 'منتهية', '2024-12-23', '0000-00-00', 'private', '3'),
-('Vu6a9zyeJEFZiz5Rb6tu', 'chO1dBPVhPJwjH9WJ3EY', 'Expedita voluptatem', '8', 'قيد الانتظار', '2024-12-26', '0000-00-00', 'خاصة', '1');
+('5joUSqGiHtGmRbtZb4pp', 'SU23Ad8jmMaBIFa7o0qt', 'لدي بعض المشاكل في فناء المنزل و هناك بعض الجيران المزعجين', '8', 'Done', '2025-01-10', '2025-01-10', 'خاصة', '3'),
+('lQivWdUQncYXD38SamFO', 'oW0AiXqzbVbHtrtAFDq4', 'هناك قمامة جانب الحاويات , و الاهالي يقومون بحرق النفايات و اصبح الجو ملوث ', '1', 'Done', '2025-01-10', '2025-01-10', 'خاصة', '4'),
+('N9DGTGLiCVeUo69TJxGn', 'oW0AiXqzbVbHtrtAFDq4', 'المواصلات تستهلك وقت كبير جدا للوصول الى الحارات الشرقية الشمالية المتفرعة من شارع محمود عبد العزيز', '6', 'Pending', '2025-01-10', '0000-00-00', 'عامة', '1'),
+('RMhDfqhY7g6BZndw3HIs', 'SU23Ad8jmMaBIFa7o0qt', 'الطاقة لا تفنى و لا تستحدث من العدم,بل تتحول من شكل للآخر دون زيادة أو نقصان.', '5', 'Closed', '2025-01-10', '2025-01-10', 'عامة', '4');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `message_id` varchar(20) NOT NULL,
+  `message_content` text NOT NULL,
+  `created_at` datetime NOT NULL,
+  `sender_id` varchar(20) NOT NULL,
+  `receiver_id` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`message_id`, `message_content`, `created_at`, `sender_id`, `receiver_id`) VALUES
+('3YyAvobafdjC1mhknRip', 'شكراً,على سرعة الاستجابة.', '2025-01-10 20:33:25', 'SU23Ad8jmMaBIFa7o0qt', 'fquHXorTWB5kpaIEsGFQ'),
+('qTEcCNtrs566mpbB7Y4v', 'شكرا , لانك سريع في الرد', '2025-01-10 20:34:21', 'oW0AiXqzbVbHtrtAFDq4', '37LxeyHsczcMGLxBYZKd'),
+('rPuLz0sQc5ZB3bUTW7Lj', 'يرجى الرد على مشكلتي في اسرع وقت ممكن , شاكرين تعاونكم', '2025-01-10 20:33:05', 'SU23Ad8jmMaBIFa7o0qt', '37LxeyHsczcMGLxBYZKd'),
+('T0jq4KHQLJ2m8vqTdwbh', 'لماذا لم يتم الرد على رسائلي حتى الان', '2025-01-10 20:34:35', 'oW0AiXqzbVbHtrtAFDq4', 'fquHXorTWB5kpaIEsGFQ');
 
 -- --------------------------------------------------------
 
@@ -132,12 +153,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `type`, `fullname`, `national_id`) VALUES
-('6OaP3I16o0a2ksl3UuSx', 'karamma3rouf@gmail.com', '$2y$10$KvOUTjcvGtHh19D2HVteBu3uWud8aHGkDqIa1ZlfltT9jKRSbYzqm', 'user', '', '0'),
-('7BSr2mfaf4hd54AMIIGu', 'karam@gmail.com', '$2y$10$IfnxBbTM3dLZ8oeLLQl7quYMALs/QUzcnLF2/eO4sl4CPw7QaD/0G', 'user', '', '0'),
-('chO1dBPVhPJwjH9WJ3EY', 'sonyzaquq@mailinator.com', '$2y$10$WR1gQpeybDHv5AlWUKAgw.zyTWbReNwyFItpXaGn.e4rOopMu8OMe', 'user', 'Amery Burke', '+1 (643) 9'),
-('fjorQNciv2PdG3mEATMW', 'wazav@mailinator.com', '$2y$10$rR8hNR7V6OWx86Up6vBCV.mvhgHEXE7Pe3QpplDhOgpSefXE016O.', 'user', 'Noel Young', 'Sit natus '),
-('oWicO6A2fOJPRMUO8TuB', 'kk@gmail.com', '$2y$10$q80trjIWeJmJDm69YcnqSeUa0CJQuHA9EkQQ9.jWVuFq/byFJ0PKy', 'admin', '', '0'),
-('UXhj6wehBI0oHDmRtmN5', 'k@g.c', '$2y$10$NDcZ1vw/89nM2ZWOhWCBU.bjCemyeqbmxAXxt3Aqb19oKuaujDL5G', 'user', 'karam', '11223344');
+('37LxeyHsczcMGLxBYZKd', 'karam@gmail.com', '$2y$10$LtQA87VYVT1pQ5nRdikR8uQFcuMioNhghV591axhYlQw57H9nnrZ6', 'admin', 'karam maarouf', '998877'),
+('fquHXorTWB5kpaIEsGFQ', 'hasan@gmail.com', '$2y$10$PLu4uar685LpLcKX4iZ2ne1UXjl2GJKqdumbb7STcaKYMGx6/9.2u', 'admin', 'hasan shhade', '885522'),
+('oW0AiXqzbVbHtrtAFDq4', 'saleh@gmail.com', '$2y$10$X49wSGqECvOtCX7U7JEBA.CVaCIozCLIF.n.U/ZoVx3ma0/E2XC0e', 'user', 'saleh haron', '446611'),
+('SU23Ad8jmMaBIFa7o0qt', 'qusay@gmail.com', '$2y$10$aSZPn2bZOUyQmrk.JtbDleo2QM5jgiMz2m5Vg/acuaeryCWGPwRPu', 'user', 'qusay fanoos', '447799');
 
 --
 -- Indexes for dumped tables
@@ -168,6 +187,12 @@ ALTER TABLE `comments`
 ALTER TABLE `complaints`
   ADD PRIMARY KEY (`complaint_id`),
   ADD KEY `fk_user` (`user_id`);
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`message_id`);
 
 --
 -- Indexes for table `users`
