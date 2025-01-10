@@ -1,5 +1,4 @@
 
-صفحة عرض الشكاوي
 <?php
 
 session_start();

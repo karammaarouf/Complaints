@@ -87,22 +87,22 @@ function getcomplaint($id = 'all',$status='all')
 {
     global $conn;
     if ($id == 'all'&& $status == 'all') {
-        $sql = $conn->prepare('SELECT * FROM complaints');
+        $sql = $conn->prepare('SELECT * FROM complaints ORDER BY submission_date DESC');
         $sql->execute();
         $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     }
     elseif ($id != 'all' && $status != 'all') {
-        $sql = $conn->prepare('SELECT * FROM complaints WHERE user_id = ? or status = ?');
+        $sql = $conn->prepare('SELECT * FROM complaints WHERE user_id = ? or status = ? ORDER BY submission_date DESC');
         $sql->execute([$id, $status]);
         $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     }
     elseif ($id != 'all') {
-        $sql = $conn->prepare('SELECT * FROM complaints WHERE complaint_id = ?');
+        $sql = $conn->prepare('SELECT * FROM complaints WHERE complaint_id = ? ORDER BY submission_date DESC');
         $sql->execute([$id]);
         $result = $sql->fetch(PDO::FETCH_ASSOC);
     }
     elseif ($status != 'all') {
-        $sql = $conn->prepare('SELECT * FROM complaints WHERE status = ?');
+        $sql = $conn->prepare('SELECT * FROM complaints WHERE status = ? ORDER BY submission_date DESC');
         $sql->execute([$status]);
         $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -171,6 +171,12 @@ function actioncomplaint($action, $complaint_id){
     }
 
     $sql->execute([$today, $complaint_id]);
+    return $sql->rowCount() > 0;
+}
+function deletecomplaint($id){
+    global $conn;
+    $sql = $conn->prepare('DELETE FROM complaints WHERE complaint_id = ?');
+    $sql->execute([$id]);
     return $sql->rowCount() > 0;
 }
 
