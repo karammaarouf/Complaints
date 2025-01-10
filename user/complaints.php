@@ -2,24 +2,57 @@
 require_once('../comploments/connect.php');
 require_once('../comploments/sql.php');
 session_start();
+
+// Get active tab from session or set default
+if (!isset($_SESSION['active_tab'])) {
+    $_SESSION['active_tab'] = 'complaintForm';
+}
+
+// Update active tab if set in POST/GET
+if (isset($_POST['active_tab'])) {
+    $_SESSION['active_tab'] = $_POST['active_tab'];
+} else if (isset($_GET['active_tab'])) {
+    $_SESSION['active_tab'] = $_GET['active_tab']; 
+}
+
+
 if (isset($_SESSION['user_id'])) {
 $category=getcategory();
 $area=getarea();
 $user=getuser($_SESSION['user_id']);
+$complaints=getcomplaint();
 
 if(isset($_POST['send'])){
-$complaint_id=unique_id(); 
-$user_id=$_SESSION['user_id'];
-$description=$_POST['discreption'];
-$category_id=$_POST['category'];
-$type=$_POST['type'];
-$area=$_POST['area'];
-$sql=$conn->prepare("insert into complaints (complaint_id, user_id, category_id,type,area_id,description)values(?,?,?,?,?,?)");
-    $sql->execute([$complaint_id,$user_id,$category_id,$type,$area,$description]);
-    header('location: complaints.php');
-    exit();
-
+    $complaint_id=unique_id(); 
+    $user_id=$_SESSION['user_id'];
+    $description=$_POST['discreption'];
+    $category_id=$_POST['category'];
+    $type=$_POST['type'];
+    $area=$_POST['area'];
+    $sql=$conn->prepare("insert into complaints (complaint_id, user_id, category_id,type,area_id,description)values(?,?,?,?,?,?)");
+    if($sql->execute([$complaint_id,$user_id,$category_id,$type,$area,$description])) {
+        $_SESSION['success_msg'] = 'تم ارسال الشكوى بنجاح';
+        header('location: complaints.php');
+        exit();
+    } else {
+        $_SESSION['error_msg'] = 'حدث خطأ اثناء ارسال الشكوى';
+        header('location: complaints.php'); 
+        exit();
+    }
 } 
+if(isset($_POST['delete'])){
+    $complaint_id = $_POST['complaint_id'];
+    if(deletecomplaint($complaint_id)){
+        $_SESSION['success_msg'] = 'تم حذف الشكوى بنجاح';
+        header('location: complaints.php');
+        exit();
+    } else {
+        $_SESSION['error_msg'] = 'حدث خطأ أثناء حذف الشكوى';
+        header('location: complaints.php');
+        exit();
+    }
+}
+
 }
 else {
     header('location: ../auth/login.php');
@@ -223,8 +256,14 @@ else {
             <ul class="navbar-nav ml-auto">
                 <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
                 
-                <li class="nav-item active">
-                    <a class="nav-link" href="user.php"><i class="far fa-address-book"></i>الصفحة الرئيسية </a>
+                <li class="nav-item <?php echo $_SESSION['active_tab'] == 'complaintForm' ? 'active' : ''; ?>">
+                    <a class="nav-link" href="#" onclick="showComplaintForm(); updateActiveTab('complaintForm');"><i class="far fa-address-book"></i>تقديم شكوى</a>
+                </li>
+                <li class="nav-item <?php echo $_SESSION['active_tab'] == 'complaints' ? 'active' : ''; ?>">
+                    <a class="nav-link" href="#" onclick="showComplaints(); updateActiveTab('complaints');"><i class="far fa-address-book"></i>عرض الشكاوي</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="user.php"><i class="far fa-address-book"></i>الصفحة الرئيسية</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php
@@ -243,17 +282,40 @@ else {
                     }
                      ?></a>
                 </li>
-                
-               
             </ul>
         </div>
     </nav>
 
+<div id="mainContent">
+     <!-- رسالة اشعار اول التحميل بعد التعديلات -->
+     <?php if(isset($_SESSION['success_msg']) || isset($_SESSION['error_msg'])): ?>
+        <div class="alert-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+            <?php if(isset($_SESSION['success_msg'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>نجاح!</strong> <?php echo $_SESSION['success_msg']; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php unset($_SESSION['success_msg']); ?>
+            <?php endif; ?>
 
-  <section class="complaint-section" style="background: #f8f9fa; padding: 100px 0; " >
+            <?php if(isset($_SESSION['error_msg'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>خطأ!</strong> <?php echo $_SESSION['error_msg']; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php unset($_SESSION['error_msg']); ?>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+    
+  <section id="complaintForm" class="complaint-section" style="background: #f8f9fa; padding: 50px 0; <?php echo $_SESSION['active_tab'] == 'complaintForm' ? 'display: block;' : 'display: none;' ?>">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="complaint-box" style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
                     <h2 class="text-center mb-4" style="color: var(--mian_color);">تقديم شكوى</h2>
                     <form action="" method="post">
@@ -269,109 +331,192 @@ else {
                         </div>
 
                         <div class="form-group w-100 le">
-        <label for="district">نوع الشكوى</label>
-        <select name="type" class="form-control" id="district" required>
-            <option value="">اختر النوع</option>
-            <option value="عامة">عامة </option>
-            <option value="خاصة"> خاصة</option>
-
-        </select>
-    </div>
+                            <label for="district">نوع الشكوى</label>
+                            <select name="type" class="form-control" id="district" required>
+                                <option value="">اختر النوع</option>
+                                <option value="عامة">عامة </option>
+                                <option value="خاصة"> خاصة</option>
+                            </select>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="district">المنطقة</label>
                             <select name="area" class="form-control" id="district" required>
                                 <option value="">اختر المنطقة</option>
-<?php foreach ($area as $areaa): ?>
-    <option value="<?= $areaa['area_id'] ?>"><?= $areaa['area_name'] ?></option>
-    <?php endforeach; ?>
+                                <?php foreach ($area as $areaa): ?>
+                                    <option value="<?= $areaa['area_id'] ?>"><?= $areaa['area_name'] ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
+                        
                         <div class="form-group">
                             <label for="district"> اختر التصنيف </label>
                             <select class="form-control" name="category" id="district" required>
-                            <option value="">اختر التصنيف </option>
-<?php foreach ($category as $key => $value) : ?>
-    <option value="<?= $value['category_id'] ?>"><?= $value['category_name'] ?></option>
-
-    <?php endforeach; ?>
-
+                                <option value="">اختر التصنيف </option>
+                                <?php foreach ($category as $key => $value) : ?>
+                                    <option value="<?= $value['category_id'] ?>"><?= $value['category_name'] ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
+                        
                         <div class="form-group">
                             <label for="complaint">تفاصيل الشكوى</label>
                             <textarea name="discreption" class="form-control" id="complaint" rows="4" required></textarea>
                         </div>
-                        <button name="send" type="submit" class="btn btn-primary btn-block" style="background: var(--mian_color); border: none; "onmouseover="this.style.backgroundColor='var(--brown)'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3)'" onmouseout="this.style.backgroundColor='var(--mian_color)'; this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.2)'">إرسال الشكوى</button>
+                        
+                        <button name="send" type="submit" class="btn btn-primary btn-block" style="background: var(--mian_color); border: none;" onmouseover="this.style.backgroundColor='var(--brown)'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3)'" onmouseout="this.style.backgroundColor='var(--mian_color)'; this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.2)'">إرسال الشكوى</button>
+                        <input type="hidden" name="active_tab" value="complaintForm">
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</section>
+  </section>
 
+  <section id="complaintsList" class="complaint-section" style="background: #f8f9fa; padding: 50px 0; <?php echo $_SESSION['active_tab'] == 'complaintsList' ? 'display: block;' : 'display: none;' ?>">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-11">
+                <div class="complaints-box" style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+                    <h2 class="text-center mb-4" style="color: var(--mian_color);">الشكاوي المقدمة</h2>
+                    <div id="complaintsList">
+            <div class="page-content fade-in-up">
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">Complaints Table</div>
+                    </div>
+                    <div class="ibox-body">
+                        <table class="table table-striped table-bordered table-hover" id="example-table" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                    <th>الحالة</th>
+                                    <th>الموقع</th>
+                                    <th>التصنيف</th>
+                                    <th>المحتوى</th>
+                                    <th>تاريخ التقديم</th>
+                                    <th>تاريخ الحل</th>
+                                    <th>الاجراءات</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>الحالة</th>
+                                    <th>الموقع</th>
+                                    <th>التصنيف</th>
+                                    <th>المحتوى</th>
+                                    <th>تاريخ التقديم</th>
+                                    <th>تاريخ الحل</th>
+                                    <th>الاجراءات</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <!-- عرض الشكاوي -->
+                                <?php foreach($complaints as $complaint) : ?>
+                                    <?php if($complaint['type'] != 'private' || $complaint['user_id'] == $_SESSION['user_id']): ?>
+                                    <tr>
+                                        <td><?= $complaint['status'] ?></td>
+                                        <td><?= getarea($complaint['area_id'])['area_name'] ?></td>
+                                        <td><?= getcategory($complaint['category_id'])['category_name'] ?></td>
+                                        <td><?= $complaint['description'] ?></td>
+                                        <td><?= $complaint['submission_date'] ?></td>
+                                        <td><?= $complaint['resolution_date'] ?></td>
+                                        <td>
+                                            <?php if($complaint['user_id'] == $_SESSION['user_id']): ?>
+                                                <form action="complaints.php" method="post">
+                                                    <input type="hidden" name="complaint_id" value="<?= $complaint['complaint_id'] ?>">
+                                                    <button type="submit" name="delete" class="btn btn-danger">حذف</button>
+                                                    <input type="hidden" name="active_tab" value="complaintsList">
+                                                </form>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"> </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
+<script>
+function showComplaintForm() {
+    document.getElementById('complaintForm').style.display = 'block';
+    document.getElementById('complaintsList').style.display = 'none';
+}
 
-    <script>// ---------Responsive-navbar-active-animation-----------
-        function test(){
-            var tabsNewAnim = $('#navbarSupportedContent');
-            var selectorNewAnim = $('#navbarSupportedContent').find('li').length;
-            var activeItemNewAnim = tabsNewAnim.find('.active');
-            var activeWidthNewAnimHeight = activeItemNewAnim.innerHeight();
-            var activeWidthNewAnimWidth = activeItemNewAnim.innerWidth();
-            var itemPosNewAnimTop = activeItemNewAnim.position();
-            var itemPosNewAnimLeft = activeItemNewAnim.position();
-            $(".hori-selector").css({
-                "top":itemPosNewAnimTop.top + "px", 
-                "left":itemPosNewAnimLeft.left + "px",
-                "height": activeWidthNewAnimHeight + "px",
-                "width": activeWidthNewAnimWidth + "px"
-            });
-            $("#navbarSupportedContent").on("click","li",function(e){
-                $('#navbarSupportedContent ul li').removeClass("active");
-                $(this).addClass('active');
-                var activeWidthNewAnimHeight = $(this).innerHeight();
-                var activeWidthNewAnimWidth = $(this).innerWidth();
-                var itemPosNewAnimTop = $(this).position();
-                var itemPosNewAnimLeft = $(this).position();
-                $(".hori-selector").css({
-                    "top":itemPosNewAnimTop.top + "px", 
-                    "left":itemPosNewAnimLeft.left + "px",
-                    "height": activeWidthNewAnimHeight + "px",
-                    "width": activeWidthNewAnimWidth + "px"
-                });
-            });
-        }
-        $(document).ready(function(){
-            setTimeout(function(){ test(); });
-        });
-        $(window).on('resize', function(){
-            setTimeout(function(){ test(); }, 500);
-        });
-        $(".navbar-toggler").click(function(){
-            $(".navbar-collapse").slideToggle(300);
-            setTimeout(function(){ test(); });
-        });
-        
-        
-        
-        // --------------add active class-on another-page move----------
-        jQuery(document).ready(function($){
-            // Get current path and find target link
-            var path = window.location.pathname.split("/").pop();
-        
-            // Account for home page with empty path
-            if ( path == '' ) {
-                path = 'index.html';
-            }
-        
-            var target = $('#navbarSupportedContent ul li a[href="'+path+'"]');
-            // Add active class to target link
-            target.parent().addClass('active');
-        });
-    </script>
+function showComplaints() {
+    document.getElementById('complaintForm').style.display = 'none';
+    document.getElementById('complaintsList').style.display = 'block';
+    
+    // Load complaints via AJAX
+    // $.ajax({
+    //     url: 'get_complaints.php', // Create this PHP file to fetch complaints
+    //     method: 'GET',
+    //     success: function(response) {
+    //         $('#complaintsList').html(response);
+    //     },
+    //     error: function() {
+    //         $('#complaintsList').html('<p class="text-center">حدث خطأ في تحميل الشكاوي</p>');
+    //     }
+    // });
+}
+
+// Navbar animation
+function test(){
+    var tabsNewAnim = $('#navbarSupportedContent');
+    var activeItemNewAnim = tabsNewAnim.find('.active');
+    var activeWidthNewAnimHeight = activeItemNewAnim.innerHeight();
+    var activeWidthNewAnimWidth = activeItemNewAnim.innerWidth();
+    var itemPosNewAnimTop = activeItemNewAnim.position();
+    var itemPosNewAnimLeft = activeItemNewAnim.position();
+    $(".hori-selector").css({
+        "top":itemPosNewAnimTop.top + "px", 
+        "left":itemPosNewAnimLeft.left + "px",
+        "height": activeWidthNewAnimHeight + "px",
+        "width": activeWidthNewAnimWidth + "px"
+    });
+}
+
+$(document).ready(function(){
+    setTimeout(function(){ test(); });
+    
+    $("#navbarSupportedContent").on("click","li",function(e){
+        $('#navbarSupportedContent ul li').removeClass("active");
+        $(this).addClass('active');
+        test();
+    });
+});
+
+$(window).on('resize', function(){
+    setTimeout(function(){ test(); }, 500);
+});
+
+$(".navbar-toggler").click(function(){
+    $(".navbar-collapse").slideToggle(300);
+    setTimeout(function(){ test(); });
+});
+
+jQuery(document).ready(function($){
+    var path = window.location.pathname.split("/").pop();
+    if (path == '') {
+        path = 'index.html';
+    }
+    var target = $('#navbarSupportedContent ul li a[href="'+path+'"]');
+    target.parent().addClass('active');
+});
+</script>
 </body>
 </html>
