@@ -2,9 +2,6 @@
 
 
 
-
-
-
 ?>
 <div class="page-heading">
     <h1 class="page-title">Profile</h1>
@@ -133,6 +130,22 @@
     .profile-stat-count {
         font-size: 22px
     }
+
+    .admin-select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        margin-bottom: 10px;
+        direction: rtl;
+    }
+
+    .chat-footer {
+        padding: 15px;
+        border-top: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+    }
     </style>
 </div>
 
@@ -150,10 +163,16 @@
         <!-- رسائل الدردشة ستظهر هنا -->
     </div>
     <form id="messageForm" onsubmit="sendMessage(event)">
-    <div class="chat-footer">
-        <input type="text" name="message" id="messageInput" placeholder="اكتب رسالتك هنا..." required>
-        <button type="submit" name="send_message"><i class="fa fa-paper-plane"></i></button>
-    </div>
+        <div class="chat-footer">
+            <select name="admin_id" id="adminSelect" class="admin-select" required>
+                <option value="">اختر المسؤول</option>
+                <?php foreach($admins as $admin): ?>
+                    <option value="<?= $admin['id'] ?>"><?= $admin['fullname'] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <input type="text" name="message" id="messageInput" placeholder="اكتب رسالتك هنا..." required>
+            <button type="submit" name="send_message"><i class="fa fa-paper-plane"></i></button>
+        </div>
     </form>
 </div>
 
@@ -259,7 +278,14 @@ function sendMessage(e) {
     }
     
     const messageInput = document.getElementById('messageInput');
+    const adminSelect = document.getElementById('adminSelect');
     const message = messageInput.value.trim();
+    const adminId = adminSelect.value;
+    
+    if (!adminId) {
+        alert('الرجاء اختيار المسؤول أولاً');
+        return;
+    }
     
     if (message) {
         fetch('', {
@@ -267,7 +293,7 @@ function sendMessage(e) {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: `message=${encodeURIComponent(message)}&send_message=1`
+            body: `message=${encodeURIComponent(message)}&admin_id=${adminId}&send_message=1`
         })
         .then(response => {
             if(response.ok) {
@@ -280,6 +306,9 @@ function sendMessage(e) {
                 messageElement.innerHTML = `
                     <div style="background: #007bff; color: white; padding: 8px 15px; border-radius: 20px; display: inline-block;">
                         ${message}
+                        <small style="display: block; font-size: 0.8em; opacity: 0.8;">
+                            إلى: ${adminSelect.options[adminSelect.selectedIndex].text}
+                        </small>
                     </div>
                 `;
                 chatBody.appendChild(messageElement);

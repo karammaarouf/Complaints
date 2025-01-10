@@ -50,11 +50,13 @@ $messages = getmessage();
 if(isset($_POST['send_message'])){
     $message_content= $_POST['message'];
     $user_id = $_SESSION['user_id'];
+    $receiver_id = $_POST['admin_id'];
     $created_at = date('Y-m-d H:i:s');
     
     $id=unique_id();
-    sendmessage($user_id, $message_content,$created_at,$id);
+    sendmessage($user_id, $message_content,$created_at,$id,$receiver_id);
 }
+$messages = getmessagebyid($_SESSION['user_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">

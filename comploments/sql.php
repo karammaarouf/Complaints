@@ -26,10 +26,26 @@ function getmessage($id='all'){
     }
     return $result;
 }
-function sendmessage($user_id, $message_content,$created_at,$message_id){
+function sendmessage($user_id, $message_content,$created_at,$message_id,$receiver_id){
     global $conn;
-    $sql = $conn->prepare('INSERT INTO messages ( sender_id, message_content, created_at,message_id) VALUES (?, ?, ?,?)');
-    $sql->execute([$user_id, $message_content,$created_at,$message_id]);
+    $sql = $conn->prepare('INSERT INTO messages ( sender_id, message_content, created_at,message_id,receiver_id) VALUES (?, ?, ?,?,?)');
+    $sql->execute([$user_id, $message_content,$created_at,$message_id,$receiver_id]);
+}
+function getadmins(){
+    global $conn;
+    $sql = $conn->prepare('SELECT * FROM users WHERE type = "admin"');
+    $sql->execute();
+    $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+function getmessagebyid($receiver_id) {
+    global $conn;
+    $sql = $conn->prepare('SELECT messages.*, users.fullname FROM messages 
+                          INNER JOIN users ON messages.sender_id = users.id 
+                          WHERE messages.receiver_id = ?');
+    $sql->execute([$receiver_id]);
+    $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
 }
 
 

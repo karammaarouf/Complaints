@@ -1,4 +1,3 @@
-
 <div class="page-heading">
     <h1 class="page-title">Profile</h1>
     <ol class="breadcrumb">
@@ -123,7 +122,20 @@
         <button class="close-chat" onclick="toggleChat()">×</button>
     </div>
     <div class="chat-body" id="chatBody">
-        <!-- رسائل الدردشة ستظهر هنا -->
+        <?php foreach($messages as $message): ?>
+            <div class="message <?= ($message['sender_id'] == $_SESSION['user_id']) ? 'sent' : 'received' ?>">
+                <div class="message-content"><?= $message['message_content'] ?></div>
+                <div class="message-info">
+                    <span class="message-time"><?= $message['created_at'] ?></span>
+                    <span class="message-sender"><?= $message['fullname'] ?></span>
+                    <?php if($message['sender_id'] != $_SESSION['user_id']): ?>
+                        <button class="reply-btn" onclick="replyToMessage('<?= $message['fullname'] ?>')">
+                            <i class="fa fa-reply"></i> رد
+                        </button>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
     <form id="messageForm" onsubmit="sendMessage(event)">
     <div class="chat-footer">
@@ -145,6 +157,58 @@
 
     .profile-stat-count {
         font-size: 22px
+    }
+
+    .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 80%;
+    }
+
+    .sent {
+        background-color: #007bff;
+        color: white;
+        margin-left: auto;
+    }
+
+    .received {
+        background-color: #f1f1f1;
+        margin-right: auto;
+    }
+
+    .message-content {
+        margin-bottom: 5px;
+    }
+
+    .message-info {
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .message-time, .message-sender {
+        color: #666;
+    }
+
+    .sent .message-time, .sent .message-sender {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .reply-btn {
+        background: none;
+        border: none;
+        color: #007bff;
+        font-size: 12px;
+        cursor: pointer;
+        padding: 2px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+    .reply-btn:hover {
+        background-color: rgba(0, 123, 255, 0.1);
     }
     </style>
 </div>
@@ -280,5 +344,10 @@ function sendMessage(e) {
     }
 }
 
+function replyToMessage(username) {
+    const messageInput = document.getElementById('messageInput');
+    messageInput.value = `@${username} `;
+    messageInput.focus();
+}
 
 </script>
