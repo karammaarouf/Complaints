@@ -31,6 +31,19 @@ function sendmessage($user_id, $message_content,$created_at,$message_id){
     $sql = $conn->prepare('INSERT INTO messages ( sender_id, message_content, created_at,message_id) VALUES (?, ?, ?,?)');
     $sql->execute([$user_id, $message_content,$created_at,$message_id]);
 }
+
+
+//
+function getmessagesbetweenusers($sender_id, $receiver_id) {
+    global $conn;
+    $sql = $conn->prepare('SELECT * FROM messages WHERE 
+        (sender_id = ? AND receiver_id = ?) OR 
+        (sender_id = ? AND receiver_id = ?)
+        ORDER BY created_at ASC');
+    $sql->execute([$sender_id, $receiver_id, $receiver_id, $sender_id]);
+    $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
 //عرض المناطق
 function getarea($id = 'all')
 {

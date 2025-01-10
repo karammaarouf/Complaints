@@ -112,6 +112,26 @@
             </div>
         </div>
     </div>
+    <!-- إضافة زر الدردشة العائم ونافذة المحادثة -->
+<div class="chat-button" onclick="toggleChat()">
+    <i class="fa fa-comments"></i>
+</div>
+
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+        <span>المحادثة مع الإدارة</span>
+        <button class="close-chat" onclick="toggleChat()">×</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <!-- رسائل الدردشة ستظهر هنا -->
+    </div>
+    <form id="messageForm" onsubmit="sendMessage(event)">
+    <div class="chat-footer">
+        <input type="text" name="message" id="messageInput" placeholder="اكتب رسالتك هنا..." required>
+        <button type="submit" name="send_message"><i class="fa fa-paper-plane"></i></button>
+    </div>
+    </form>
+</div>
     <style>
     .profile-social a {
         font-size: 16px;
@@ -128,3 +148,137 @@
     }
     </style>
 </div>
+
+<style>
+    /* Existing styles ... */
+
+    .chat-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #007bff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 1000;
+    }
+
+    .chat-button i {
+        color: white;
+        font-size: 24px;
+    }
+
+    .chat-window {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 300px;
+        height: 400px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        display: none;
+        z-index: 1000;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        padding: 15px;
+        background: #007bff;
+        color: white;
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .chat-body {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+    }
+
+    .chat-footer {
+        padding: 15px;
+        border-top: 1px solid #eee;
+        display: flex;
+    }
+
+    .chat-footer input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        margin-right: 10px;
+    }
+
+    .chat-footer button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .close-chat {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+</style>
+<script>
+function toggleChat() {
+    const chatWindow = document.getElementById('chatWindow');
+    if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
+        chatWindow.style.display = 'flex';
+    } else {
+        chatWindow.style.display = 'none';
+    }
+}
+
+function sendMessage(e) {
+    if(e) {
+        e.preventDefault();
+    }
+    
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (message) {
+        fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `message=${encodeURIComponent(message)}&send_message=1`
+        })
+        .then(response => {
+            if(response.ok) {
+                messageInput.value = '';
+                // Add message to chat window
+                const chatBody = document.getElementById('chatBody');
+                const messageElement = document.createElement('div');
+                messageElement.style.marginBottom = '10px';
+                messageElement.style.textAlign = 'right';
+                messageElement.innerHTML = `
+                    <div style="background: #007bff; color: white; padding: 8px 15px; border-radius: 20px; display: inline-block;">
+                        ${message}
+                    </div>
+                `;
+                chatBody.appendChild(messageElement);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+
+</script>
