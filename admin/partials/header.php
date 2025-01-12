@@ -41,7 +41,6 @@
                             <a class="list-group-item">
                                 <div class="media">
                                     <div class="media-img">
-                                        <img src="../css/assets/img/users/u1.jpg" />
                                     </div>
                                     <div class="media-body">
                                         <div class="font-strong"> </div>Jeanne Gonzalez<small
@@ -53,7 +52,6 @@
                             <a class="list-group-item">
                                 <div class="media">
                                     <div class="media-img">
-                                        <img src="../css/assets/img/users/u2.jpg" />
                                     </div>
                                     <div class="media-body">
                                         <div class="font-strong"></div>Becky Brooks<small
@@ -65,7 +63,6 @@
                             <a class="list-group-item">
                                 <div class="media">
                                     <div class="media-img">
-                                        <img src="../css/assets/img/users/u3.jpg" />
                                     </div>
                                     <div class="media-body">
                                         <div class="font-strong"></div>Frank Cruz<small
@@ -77,7 +74,6 @@
                             <a class="list-group-item">
                                 <div class="media">
                                     <div class="media-img">
-                                        <img src="../css/assets/img/users/u4.jpg" />
                                     </div>
                                     <div class="media-body">
                                         <div class="font-strong"></div>Rose Pearson<small

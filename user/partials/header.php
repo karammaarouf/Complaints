@@ -42,7 +42,6 @@
                                     <a class="list-group-item">
                                         <div class="media">
                                             <div class="media-img">
-                                                <img src="../css/assets/img/users/u1.jpg" />
                                             </div>
                                             <div class="media-body">
                                                 <div class="font-strong"> </div>Jeanne Gonzalez<small class="text-muted float-right">Just now</small>
@@ -53,7 +52,6 @@
                                     <a class="list-group-item">
                                         <div class="media">
                                             <div class="media-img">
-                                                <img src="../css/assets/img/users/u2.jpg" />
                                             </div>
                                             <div class="media-body">
                                                 <div class="font-strong"></div>Becky Brooks<small class="text-muted float-right">18 mins</small>
@@ -64,7 +62,6 @@
                                     <a class="list-group-item">
                                         <div class="media">
                                             <div class="media-img">
-                                                <img src="../css/assets/img/users/u3.jpg" />
                                             </div>
                                             <div class="media-body">
                                                 <div class="font-strong"></div>Frank Cruz<small class="text-muted float-right">18 mins</small>
@@ -75,7 +72,6 @@
                                     <a class="list-group-item">
                                         <div class="media">
                                             <div class="media-img">
-                                                <img src="../css/assets/img/users/u4.jpg" />
                                             </div>
                                             <div class="media-body">
                                                 <div class="font-strong"></div>Rose Pearson<small class="text-muted float-right">3 hrs</small>
