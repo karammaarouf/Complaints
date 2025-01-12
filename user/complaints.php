@@ -1,14 +1,15 @@
 <?php
+// استيراد ملفات الاتصال بقاعدة البيانات والوظائف المساعدة
 require_once('../comploments/connect.php');
 require_once('../comploments/sql.php');
 session_start();
 
-// Get active tab from session or set default
+// التحقق من التاب النشط وتعيينه
 if (!isset($_SESSION['active_tab'])) {
     $_SESSION['active_tab'] = 'complaintForm';
 }
 
-// Update active tab if set in POST/GET
+// تحديث التاب النشط إذا تم تعيينه في POST/GET
 if (isset($_POST['active_tab'])) {
     $_SESSION['active_tab'] = $_POST['active_tab'];
 } else if (isset($_GET['active_tab'])) {
@@ -17,11 +18,13 @@ if (isset($_POST['active_tab'])) {
 
 
 if (isset($_SESSION['user_id'])) {
+    // جلب البيانات الأساسية المطلوبة
     $category = getcategory();
     $area = getarea();
     $user = getuser($_SESSION['user_id']);
     $complaints = getcomplaint();
 
+    // معالجة إرسال شكوى جديدة
     if (isset($_POST['send'])) {
         $complaint_id = unique_id();
         $user_id = $_SESSION['user_id'];
@@ -29,6 +32,8 @@ if (isset($_SESSION['user_id'])) {
         $category_id = $_POST['category'];
         $type = $_POST['type'];
         $area = $_POST['area'];
+        
+        // إدخال الشكوى في قاعدة البيانات
         $sql = $conn->prepare("insert into complaints (complaint_id, user_id, category_id,type,area_id,description)values(?,?,?,?,?,?)");
         if ($sql->execute([$complaint_id, $user_id, $category_id, $type, $area, $description])) {
             $_SESSION['success_msg'] = 'تم ارسال الشكوى بنجاح';
@@ -40,6 +45,8 @@ if (isset($_SESSION['user_id'])) {
             exit();
         }
     }
+
+    // معالجة حذف شكوى
     if (isset($_POST['delete'])) {
         $complaint_id = $_POST['complaint_id'];
         if (deletecomplaint($complaint_id)) {
@@ -54,6 +61,7 @@ if (isset($_SESSION['user_id'])) {
     }
 
 } else {
+    // إعادة التوجيه إلى صفحة تسجيل الدخول إذا لم يكن المستخدم مسجل الدخول
     header('location: ../auth/login.php');
 }
 ?>
@@ -518,18 +526,6 @@ if (isset($_SESSION['user_id'])) {
         function showComplaints() {
             document.getElementById('complaintForm').style.display = 'none';
             document.getElementById('complaintsList').style.display = 'block';
-
-            // Load complaints via AJAX
-            // $.ajax({
-            //     url: 'get_complaints.php', // Create this PHP file to fetch complaints
-            //     method: 'GET',
-            //     success: function(response) {
-            //         $('#complaintsList').html(response);
-            //     },
-            //     error: function() {
-            //         $('#complaintsList').html('<p class="text-center">حدث خطأ في تحميل الشكاوي</p>');
-            //     }
-            // });
         }
 
         // Navbar animation

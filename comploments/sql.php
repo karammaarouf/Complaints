@@ -1,5 +1,5 @@
 <?php
-//عرض تصنيف الشكوى
+// دالة لجلب تصنيفات الشكاوى من قاعدة البيانات، إما جميع التصنيفات أو تصنيف محدد بواسطة المعرف
 function getcategory($id = 'all')
 {
     global $conn;
@@ -15,8 +15,7 @@ function getcategory($id = 'all')
     return $result;
 }
 
-//بيانات الرسائل
-
+// دالة لجلب جميع الرسائل من قاعدة البيانات
 function getmessage($id='all'){
     global $conn;
     if($id=='all'){
@@ -26,11 +25,15 @@ function getmessage($id='all'){
     }
     return $result;
 }
+
+// دالة لإرسال رسالة جديدة وحفظها في قاعدة البيانات
 function sendmessage($user_id, $message_content,$created_at,$message_id,$receiver_id){
     global $conn;
     $sql = $conn->prepare('INSERT INTO messages ( sender_id, message_content, created_at,message_id,receiver_id) VALUES (?, ?, ?,?,?)');
     $sql->execute([$user_id, $message_content,$created_at,$message_id,$receiver_id]);
 }
+
+// دالة لجلب جميع المستخدمين من نوع مدير من قاعدة البيانات
 function getadmins(){
     global $conn;
     $sql = $conn->prepare('SELECT * FROM users WHERE type = "admin"');
@@ -38,6 +41,8 @@ function getadmins(){
     $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     return $result;
 }
+
+// دالة لجلب الرسائل الخاصة بمستخدم معين مع اسم المرسل
 function getmessagebyid($receiver_id) {
     global $conn;
     $sql = $conn->prepare('SELECT messages.*, users.fullname FROM messages 
@@ -48,8 +53,7 @@ function getmessagebyid($receiver_id) {
     return $result;
 }
 
-
-//
+// دالة لجلب المحادثة بين مستخدمين محددين مرتبة حسب التاريخ
 function getmessagesbetweenusers($sender_id, $receiver_id) {
     global $conn;
     $sql = $conn->prepare('SELECT * FROM messages WHERE 
@@ -60,7 +64,8 @@ function getmessagesbetweenusers($sender_id, $receiver_id) {
     $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     return $result;
 }
-//عرض المناطق
+
+// دالة لجلب المناطق من قاعدة البيانات، إما جميع المناطق أو منطقة محددة بواسطة المعرف
 function getarea($id = 'all')
 {
     global $conn;
@@ -76,7 +81,7 @@ function getarea($id = 'all')
     return $result;
 }
 
-//بيانات المستخدم
+// دالة لجلب بيانات المستخدمين، إما جميع المستخدمين أو مستخدم محدد بواسطة المعرف أو البريد الإلكتروني
 function getuser($id='all', $email='all')
 {
     global $conn;
@@ -98,7 +103,7 @@ function getuser($id='all', $email='all')
     return $result;
 }
 
-//بيانات الشكوى
+// دالة لجلب الشكاوى من قاعدة البيانات حسب المعرف أو الحالة أو كليهما
 function getcomplaint($id = 'all',$status='all')
 {
     global $conn;
@@ -123,10 +128,10 @@ function getcomplaint($id = 'all',$status='all')
         $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     }
    
-
     return $result;
 }
-//احضار الشكاوي حسب النوع 
+
+// دالة لجلب الشكاوى حسب النوع أو المستخدم من قاعدة البيانات
 function getcomplainttype($id = 'all',$status='all')
 {
     global $conn;
@@ -151,12 +156,10 @@ function getcomplainttype($id = 'all',$status='all')
         $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     }
    
-
     return $result;
 }
 
-
-//تحديث بيانات المستخدم
+// دالة لتحديث بيانات المستخدم في قاعدة البيانات مثل الاسم والبريد الإلكتروني وكلمة المرور
 function updateuser($id, $fullname, $email, $password)
 {
     global $conn;
@@ -176,7 +179,8 @@ function updateuser($id, $fullname, $email, $password)
     }
     return false;
 }
-//لتحديث حالة الشكوى رفض او قبول
+
+// دالة لتحديث حالة الشكوى إما بالقبول أو الرفض مع تحديث تاريخ الحل
 function actioncomplaint($action, $complaint_id){
     global $conn;
     $today = date('Y/m/d');
@@ -189,12 +193,13 @@ function actioncomplaint($action, $complaint_id){
     $sql->execute([$today, $complaint_id]);
     return $sql->rowCount() > 0;
 }
+
+// دالة لحذف شكوى محددة من قاعدة البيانات
 function deletecomplaint($id){
     global $conn;
     $sql = $conn->prepare('DELETE FROM complaints WHERE complaint_id = ?');
     $sql->execute([$id]);
     return $sql->rowCount() > 0;
 }
-
 
 ?>

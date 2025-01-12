@@ -1,13 +1,19 @@
 <?php
-
+// بدء جلسة المستخدم
 session_start();
+
+// التحقق من تسجيل دخول المستخدم وأنه من نوع admin
 if (isset($_SESSION["user_id"]) && $_SESSION["type"] == 'admin') {
 
+    // استدعاء ملفات الاتصال بقاعدة البيانات والوظائف المساعدة
     require_once('../comploments/connect.php');
     require_once('../comploments/sql.php');
+    
+    // تهيئة متغيرات الجلسة الخاصة بحالة البحث والشكاوى
     $_SESSION['sreach_status'] = 'all';
     $_SESSION['complaints'] = getcomplaint();
 
+    // معالجة تحديث حالة الشكوى
     if (isset($_POST['status'])) {
         $status = $_POST['status'];
         $complaint_id = $_POST['complaint_id'];
@@ -15,12 +21,14 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"] == 'admin') {
         $sql->execute([$status, $complaint_id]);
         header('location:dashboard.php');
     }
+
+    // معالجة البحث حسب حالة الشكوى 
     if (isset($_POST['search_status'])) {
         $_SESSION['sreach_status'] = $_POST['statu_value'];
         $_SESSION['complaints'] = getcomplaint(status: $_SESSION['sreach_status']);
-
-
     }
+
+    // معالجة الإجراءات على الشكوى (مثل الحل أو الرفض)
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
         $complaint_id = $_POST['complaint_id'];
@@ -32,10 +40,12 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"] == 'admin') {
         }
     }
 
+    // تحديد متغيرات حالة البحث والشكاوى للعرض
     $search_status = $_SESSION['sreach_status'];
     $complaints = $_SESSION['complaints'];
 
 } else {
+    // إعادة التوجيه إلى الصفحة الرئيسية إذا لم يكن المستخدم مسجل دخول كمشرف
     header('location:../index.php');
 }
 ?>

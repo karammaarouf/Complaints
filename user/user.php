@@ -1,18 +1,21 @@
 <?php
+// بدء جلسة المستخدم
 session_start();
 require_once('../comploments/connect.php');
 require_once('../comploments/sql.php');
 
-// Check for cookie and restore session if needed
+// التحقق من وجود كوكيز واستعادة بيانات الجلسة إذا لزم الأمر
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['user_id'])) {
-    // Restore all session data from cookies
+    // استعادة جميع بيانات الجلسة من الكوكيز
     $_SESSION['user_id'] = $_COOKIE['user_id'];
     $_SESSION['user_email'] = $_COOKIE['user_email'];
     $_SESSION['user_name'] = $_COOKIE['user_name'];
     $_SESSION['type'] = $_COOKIE['user_type'];
 }
 
+// التحقق من تسجيل دخول المستخدم وأنه من نوع "مستخدم"
 if (isset($_SESSION['user_id']) && $_SESSION['type'] == 'user') {
+    // جلب بيانات المستخدم والشكاوى والرسائل
     $user = getuser($_SESSION['user_id']);
     $complaints = getcomplaint($user['id']);
     $complaints_type = getcomplainttype($user['id'], $type = 'public');
@@ -20,6 +23,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['type'] == 'user') {
     $admins = getadmins();
     $messages = getmessagebyid($user['id']);
 
+    // معالجة إرسال رسالة جديدة
     if (isset($_POST['send_message'])) {
         $message_content = $_POST['message'];
         $user_id = $_SESSION['user_id'];
@@ -30,21 +34,23 @@ if (isset($_SESSION['user_id']) && $_SESSION['type'] == 'user') {
         sendmessage($user_id, $message_content, $created_at, $id, $receiver_id);
     }
 
+    // معالجة تحديث الملف الشخصي
     if (!headers_sent() && isset($_POST['update_profile'])) {
         $id = $_POST['id'];
         $fullname = $_POST['fullname'];
         $email = $_POST['email'];
         $password = $_POST['password'];
 
+        // محاولة تحديث بيانات المستخدم وعرض رسالة نجاح أو فشل
         if (updateuser($id, $fullname, $email, $password)) {
             $_SESSION['success_msg'] = 'تم تحديث البيانات بنجاح';
-
         } else {
             $_SESSION['error_msg'] = 'حدث خطأ في تحديث البيانات';
         }
     }
 
 } else {
+    // إعادة توجيه المستخدم غير المصرح له إلى الصفحة الرئيسية
     header('location:../index.php');
 }
 ?>

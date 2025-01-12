@@ -1,11 +1,12 @@
 <?php
+// استيراد ملفات الاتصال بقاعدة البيانات والدوال المساعدة
 include('../comploments/sql.php');
 require_once('../comploments/connect.php');
 session_start();
 
-// Check for cookie and restore session if needed
+// التحقق من وجود كوكيز واستعادة بيانات الجلسة إذا لزم الأمر
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['user_id'])) {
-    // Restore all session data from cookies
+    // استعادة جميع بيانات الجلسة من الكوكيز
     $_SESSION['user_id'] = $_COOKIE['user_id'];
     $_SESSION['user_email'] = $_COOKIE['user_email'];
     $_SESSION['user_name'] = $_COOKIE['user_name'];
@@ -16,11 +17,13 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['user_id'])) {
     $_SESSION['complaints'] = getcomplaint();
 }
 
+// التحقق من تسجيل دخول المستخدم وأنه من نوع مدير
 if (isset($_SESSION["user_id"]) && $_SESSION["type"] == 'admin') {
     $user = getuser($_SESSION['user_id']);
     $_SESSION['sreach_status'] = 'all';
     $_SESSION['complaints'] = getcomplaint();
 
+    // تحديث حالة الشكوى
     if (isset($_POST['status'])) {
         $status = $_POST['status'];
         $complaint_id = $_POST['complaint_id'];
@@ -28,12 +31,14 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"] == 'admin') {
         $sql->execute([$status, $complaint_id]);
         header('location:dashboard.php');
     }
+
+    // البحث عن الشكاوى حسب الحالة
     if (isset($_POST['search_status'])) {
         $_SESSION['sreach_status'] = $_POST['statu_value'];
         $_SESSION['complaints'] = getcomplaint(status: $_SESSION['sreach_status']);
-
-
     }
+
+    // تحديث بيانات الملف الشخصي
     if (!headers_sent() && isset($_POST['update_profile'])) {
         $id = $_POST['id'];
         $fullname = $_POST['fullname'];
@@ -42,23 +47,23 @@ if (isset($_SESSION["user_id"]) && $_SESSION["type"] == 'admin') {
 
         if (updateuser($id, $fullname, $email, $password)) {
             $_SESSION['success_msg'] = 'تم تحديث البيانات بنجاح';
-
         } else {
             $_SESSION['error_msg'] = 'حدث خطأ في تحديث البيانات';
-
         }
-
     }
 
     $search_status = $_SESSION['sreach_status'];
     $complaints = $_SESSION['complaints'];
 
 } else {
+    // إعادة التوجيه إلى الصفحة الرئيسية إذا لم يكن المستخدم مسجل دخول أو ليس مدير
     header('location:../index.php');
 }
 
+// إدارة الرسائل
 $messages = getmessage();
 
+// إرسال رسالة جديدة
 if (isset($_POST['send_message'])) {
     $message_content = $_POST['message'];
     $user_id = $_SESSION['user_id'];
@@ -68,6 +73,8 @@ if (isset($_POST['send_message'])) {
     $id = unique_id();
     sendmessage($user_id, $message_content, $created_at, $id, $receiver_id);
 }
+
+// جلب الرسائل الخاصة بالمستخدم الحالي
 $messages = getmessagebyid($_SESSION['user_id']);
 ?>
 <!DOCTYPE html>
