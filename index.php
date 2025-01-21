@@ -224,6 +224,7 @@ session_start();
 </head>
 
 <body>
+
     <nav class="navbar navbar-expand-custom navbar-mainbg w-100 ">
         <a class="navbar-brand navbar-logo" href="#">شكاوي بلدية</a>
         <?php if (isset($_SESSION["user_id"]) || isset($_COOKIE['user_id'])): ?>
@@ -286,6 +287,7 @@ session_start();
         <div class="hero-section"
             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); padding: 4rem; border-radius: 1rem; width: 80%; max-width: 800px; text-align: center;">
             <h1>مرحبًا بك في نظام شكاوي البلدية</h1>
+            <h1>ابو بهجت</h1>
             <p>نحن هنا للاستماع إلى شكواك والعمل على تحسين الخدمات. شاركنا رأيك وشكواك بسهولة!</p>
         </div>
     </div>
